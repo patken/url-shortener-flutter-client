@@ -1,8 +1,26 @@
-# url_shortener_flutter_client
+# Flutter Client Url Shortener
 
-A new Flutter project.
+Simple Flutter App shortening long urls using material ui, BLOC architecture and chopper for network calls
+This simple app consume Rest API From a Spring Boot Service
 
-## Getting Started
+
+# Stack
+* Dart
+* Flutter
+* DataTable
+* Http
+* Flutter Smart Dialog
+
+# Screenshots
+
+![List of shortened URLs](images/screen_01.png)
+
+![List of shortened URLs](images/screen_02.png)
+
+![List of shortened URLs](images/screen_03.png)
+
+
+# General Information
 
 This project is a starting point for a Flutter application.
 

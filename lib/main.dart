@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'URL SHORTENER',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,

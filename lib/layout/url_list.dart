@@ -15,11 +15,11 @@ class UrlList extends StatefulWidget {
 
 class UrlListState extends State<UrlList> with RestorationMixin {
   
-  final RestorableInt _rowsPerPage = RestorableInt(PaginatedDataTable.defaultRowsPerPage);
   UrlResponsePageModel urlResponsePageModel = UrlResponsePageModel.init();
   bool initialized = false;
   TextEditingController urlController = TextEditingController();
   final _formKeyUrl = GlobalKey<FormState>();
+  final _keyLoader = GlobalKey<ScaffoldState>();
   
   @override
   String? get restorationId => "url_list_data_table";
@@ -62,13 +62,8 @@ class UrlListState extends State<UrlList> with RestorationMixin {
     }
   }
 
-  @override
-  void dispose() {
-    _rowsPerPage.dispose();
-    super.dispose();
-  }
-
-  Future<void> getDialogModal(BuildContext context){
+  Future<void> getDialogModal(BuildContext context, keyContext){
+    urlController.clear();
     return showDialog<void>(
       context: context, 
       builder: (BuildContext context) {
@@ -104,7 +99,7 @@ class UrlListState extends State<UrlList> with RestorationMixin {
               onPressed: () {
                 if(_formKeyUrl.currentState!.validate()){
                   Navigator.of(context).pop(); 
-                  shortenUrl(context, urlController.text);   
+                  shortenUrl(context, urlController.text, keyContext);   
                 }
               }
             )
@@ -114,7 +109,7 @@ class UrlListState extends State<UrlList> with RestorationMixin {
     );
   }
 
-  shortenUrl(BuildContext context, String url){
+  shortenUrl(BuildContext context, String url, keyContext){
     var apiResponse = UrlShortenerService().shortenUrl(UrlRequestModel(url));
     apiResponse.then((value) {
       showDialog(
@@ -131,8 +126,10 @@ class UrlListState extends State<UrlList> with RestorationMixin {
                 actions: <Widget>[
                   TextButton(
                     onPressed: ()  {
-                      Navigator.of(context).pop();
-                      initState();
+                      Navigator.of(keyContext).pop();
+                      UrlShortenerService().getAllShortenedUrl(0, 10).then((UrlResponsePageModel value) => {
+                        handle(value)
+                      });
                     }, 
                     child: Text("Close"))
                 ],));
@@ -143,6 +140,7 @@ class UrlListState extends State<UrlList> with RestorationMixin {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      key: _keyLoader,
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: Text("List of shortened URLs", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -161,7 +159,7 @@ class UrlListState extends State<UrlList> with RestorationMixin {
                     color: Colors.blue
                   )
                 ),
-              onPressed: () => getDialogModal(context)
+              onPressed: () => getDialogModal(context, _keyLoader.currentContext)
               ),
             ),
             SingleChildScrollView(
