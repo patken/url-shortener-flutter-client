@@ -11,6 +11,13 @@ This simple app consume Rest API From a Spring Boot Service
 * Http
 * Flutter Smart Dialog
 
+# Usage
+* Clone the repos with: git clone https://github.com/patken/url-shortener-flutter-client.git
+* cd url-shortener-flutter-client
+* flutter pub get (download dependencies)
+* flutter run -d macOS
+
+
 # Screenshots
 
 ![List of shortened URLs](images/screen_01.png)
